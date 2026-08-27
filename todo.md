@@ -53,3 +53,13 @@
 - [ ] Recolocar na experiência os conteúdos omitidos, usando capítulos e painéis secundários.
 - [ ] Manter a leitura cinematográfica sem reduzir a informação comercial.
 - [ ] Validar links, menu, CTA e formulário após a expansão de conteúdo.
+
+## Gravação da referência e robô Escom
+
+- [ ] Analisar o vídeo enviado quadro a quadro e registrar estados do scroll.
+- [ ] Identificar duração, direção e easing das transições entre cenas.
+- [ ] Mapear comportamento de boxes, SVGs, frames, parallax e WebGL observado.
+- [ ] Definir o robô como protagonista recorrente da narrativa Escom.
+- [ ] Gerar/ajustar assets do robô e cenários para as poses e cenas necessárias.
+- [ ] Implementar o comportamento observado com timeline contínua e câmera.
+- [ ] Validar desktop, mobile, fallback de WebGL e reduced motion.
