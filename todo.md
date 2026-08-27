@@ -1,0 +1,11 @@
+# Revisão de fidelidade visual — HQ ilustrada
+
+- [ ] Substituir a linguagem de dashboard/telemetria por composição de história em quadrinhos.
+- [ ] Usar pintura digital com linhas de tinta, hachuras, papel/textura e paleta limitada preto, creme, vermelho e ocre.
+- [ ] Criar personagem provisório recorrente em silhueta/ilustração para conduzir a narrativa.
+- [ ] Criar painéis assimétricos com bordas pretas e cortes cinematográficos.
+- [ ] Adicionar caixas de narração e balões de diálogo com copy da Escom.
+- [ ] Implementar transições de entrada/saída entre painéis controladas por scroll.
+- [ ] Reorganizar hero e cenas para parecer uma página de HQ, não um dashboard.
+- [ ] Preservar CTA, serviços, métricas e formulário, mas integrá-los ao universo narrativo.
+- [ ] Validar desktop e mobile após a reconstrução.
