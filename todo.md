@@ -45,3 +45,11 @@
 - [ ] Usar Anime.js para microanimações de SVG, boxes e textos.
 - [ ] Implementar transições com clip-path/máscaras e frames sequenciais.
 - [ ] Validar fallback de WebGL, reduced motion e mobile.
+
+## Copy completa da Escom
+
+- [ ] Reabrir e inventariar o conteúdo atual da Escom Studio.
+- [ ] Comparar headline, proposta, pilares, serviços, processo, planos, métricas, cases, FAQ e contato.
+- [ ] Recolocar na experiência os conteúdos omitidos, usando capítulos e painéis secundários.
+- [ ] Manter a leitura cinematográfica sem reduzir a informação comercial.
+- [ ] Validar links, menu, CTA e formulário após a expansão de conteúdo.
