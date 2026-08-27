@@ -20,13 +20,29 @@ export default function Home() {
   const [active, setActive] = useState(0);
   const [menu, setMenu] = useState(false);
   useEffect(() => {
-    const observers = panels.map((panel, index) => {
-      const node = document.getElementById(`panel-${panel.id}`);
-      if (!node) return null;
-      const observer = new IntersectionObserver(([entry]) => entry.isIntersecting && setActive(index), { threshold: .55 });
-      observer.observe(node); return observer;
-    });
-    return () => observers.forEach((observer) => observer?.disconnect());
+    let frame = 0;
+    const updateTimeline = () => {
+      const viewport = window.innerHeight;
+      let closest = 0;
+      let closestDistance = Infinity;
+      panels.forEach((panel, index) => {
+        const node = document.getElementById(`panel-${panel.id}`);
+        if (!node) return;
+        const start = node.offsetTop;
+        const travel = Math.max(viewport * .72, node.offsetHeight - viewport * .28);
+        const local = Math.max(0, Math.min(1, (window.scrollY - start + viewport * .18) / travel));
+        node.style.setProperty('--panel-progress', local.toFixed(3));
+        const distance = Math.abs(node.getBoundingClientRect().top - viewport * .14);
+        if (distance < closestDistance) { closest = index; closestDistance = distance; }
+      });
+      setActive(closest);
+      frame = 0;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(updateTimeline); };
+    updateTimeline();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); if (frame) cancelAnimationFrame(frame); };
   }, []);
   const jump = (id: string) => { setMenu(false); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); };
   return <main className="comic-site">
@@ -35,7 +51,7 @@ export default function Home() {
 
     <section className="comic-hero" id="panel-intro"><div className="hero-ink" /><div className="hero-copy"><div className="panel-tag">ESCOM / GROWTH ENGINE</div><h1>Marketing,<br /><em>sem ruído.</em></h1><p>Construímos o sistema por trás do crescimento: dados, tráfego, automação, branding e vendas.</p><button className="comic-cta" onClick={() => jump("panel-data")}>VIRAR A PÁGINA <ArrowDown size={16} /></button></div><div className="hero-frame"><img src="/manus-storage/escom-comic-character_71abfa06.png" alt="Operador da Escom caminhando pelo sistema de crescimento" /><Caption>EM UM TERRITÓRIO CHEIO DE RUÍDO,<br />UMA FIGURA PROCURA O SINAL.</Caption></div></section>
 
-    <div className="panel-story">{panels.slice(1).map((panel, index) => <section className={`comic-panel panel-${panel.id}`} id={`panel-${panel.id}`} key={panel.id}><div className="panel-art" style={{ backgroundImage: `url(${panel.image})` }} /><div className="panel-border panel-border--one" /><div className="panel-border panel-border--two" /><div className="panel-copy"><div className="panel-tag"><span>{panel.no}</span> // {panel.kicker}</div><h2>{panel.title.split("\n").map((line) => <span key={line}>{line}</span>)}</h2><p>{panel.caption}</p></div><Speech>{panel.bubble}</Speech><Caption>{panel.no === "02" ? "DADOS QUE DECIDEM." : panel.no === "03" ? "AUTOMAÇÃO INTELIGENTE." : "DO PRIMEIRO CLIQUE À VENDA."}</Caption><div className="ink-streak" /></section>)}</div>
+    <div className="panel-story">{panels.slice(1).map((panel, index) => <section className={`comic-panel panel-${panel.id} ${active === index + 1 ? "is-active" : ""}`} id={`panel-${panel.id}`} key={panel.id}><div className="panel-art" style={{ backgroundImage: `url(${panel.image})` }} /><div className="panel-border panel-border--one" /><div className="panel-border panel-border--two" /><div className="panel-copy"><div className="panel-tag"><span>{panel.no}</span> // {panel.kicker}</div><h2>{panel.title.split("\n").map((line) => <span key={line}>{line}</span>)}</h2><p>{panel.caption}</p></div><Speech>{panel.bubble}</Speech><Caption>{panel.no === "02" ? "DADOS QUE DECIDEM." : panel.no === "03" ? "AUTOMAÇÃO INTELIGENTE." : "DO PRIMEIRO CLIQUE À VENDA."}</Caption><div className="ink-streak" /></section>)}</div>
 
     <section className="results-page" id="results"><div className="page-topline"><span>// ISSUE 02 / PROOF</span><span>REAL SYSTEMS / REAL SIGNALS</span></div><div className="results-layout"><div><p className="panel-tag">O QUE ENCONTRAMOS NO CAMINHO</p><h2>Não vendemos<br /><em>presença.</em><br />Operamos resultado.</h2><p className="results-lead">Do primeiro clique ao fechamento da venda no CRM, cada etapa é supervisionada, integrada e mensurada.</p></div><div className="result-panels">{[["40h/sem", "recuperadas em automação"], ["+240%", "aumento de conversão"], ["0", "leads perdidos"]].map(([value, label], i) => <div className="result-box" key={label}><span>CASE / 0{i + 1}</span><strong>{value}</strong><p>{label}</p></div>)}</div></div></section>
 

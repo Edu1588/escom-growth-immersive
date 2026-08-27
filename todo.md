@@ -9,3 +9,11 @@
 - [ ] Reorganizar hero e cenas para parecer uma página de HQ, não um dashboard.
 - [ ] Preservar CTA, serviços, métricas e formulário, mas integrá-los ao universo narrativo.
 - [ ] Validar desktop e mobile após a reconstrução.
+
+## Correção de movimento baseada na referência
+
+- [ ] Acessar a referência e observar o scroll em estados sucessivos.
+- [ ] Registrar diferença entre scroll físico, progresso de timeline e troca de cena.
+- [ ] Implementar um controlador de progresso contínuo em vez de apenas IntersectionObserver.
+- [ ] Animar parallax, escala, posição, máscara, quadros e texto conforme o progresso.
+- [ ] Validar a sensação de continuidade entre painéis no desktop e no mobile.
