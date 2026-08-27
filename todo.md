@@ -28,3 +28,20 @@
 - [ ] Criar frames sobrepostos que entram, saem, giram e mudam de escala.
 - [ ] Implementar máscaras/clip-path para transições entre cenas.
 - [ ] Validar fallback para reduced motion e mobile.
+
+## Transparência sobre fidelidade da referência
+
+- [ ] Separar evidências confirmadas no bundle de hipóteses sobre o runtime HydraX.
+- [ ] Explicar que o navegador disponível redirecionou a referência para `/unsupported`.
+- [ ] Explicar que identificar tecnologias não revela automaticamente timelines, assets e autoria visual.
+- [ ] Definir os dados e testes necessários para uma reconstrução fiel do movimento.
+
+## Reconstrução com stack de animação dedicada
+
+- [ ] Adicionar Three.js, GSAP e Anime.js ao frontend.
+- [ ] Substituir o canvas 2D/WebGL mínimo por uma cena Three.js persistente.
+- [ ] Criar câmera, partículas, planos de cenários, profundidade e parallax por camada.
+- [ ] Criar timeline GSAP ligada a um scroll virtual contínuo.
+- [ ] Usar Anime.js para microanimações de SVG, boxes e textos.
+- [ ] Implementar transições com clip-path/máscaras e frames sequenciais.
+- [ ] Validar fallback de WebGL, reduced motion e mobile.
