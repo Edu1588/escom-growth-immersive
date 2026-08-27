@@ -17,3 +17,14 @@
 - [ ] Implementar um controlador de progresso contínuo em vez de apenas IntersectionObserver.
 - [ ] Animar parallax, escala, posição, máscara, quadros e texto conforme o progresso.
 - [ ] Validar a sensação de continuidade entre painéis no desktop e no mobile.
+
+## Reconstrução interativa avançada
+
+- [ ] Criar uma camada de progresso global baseada em scroll para alimentar todas as animações.
+- [ ] Adicionar canvas WebGL com partículas, ruído e linhas de telemetria.
+- [ ] Implementar parallax independente para fundo, cenário, personagem e molduras.
+- [ ] Fazer boxes/painéis expandirem e colapsarem conforme o progresso da cena.
+- [ ] Animar SVGs e paths de conexão com stroke-dashoffset.
+- [ ] Criar frames sobrepostos que entram, saem, giram e mudam de escala.
+- [ ] Implementar máscaras/clip-path para transições entre cenas.
+- [ ] Validar fallback para reduced motion e mobile.

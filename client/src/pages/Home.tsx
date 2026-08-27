@@ -3,7 +3,7 @@
  * Ground truth: illustrated graphic-novel panels, ink, paper, ochre, vermilion.
  * The operator guides the user through a sequential business transformation.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUpRight, Menu, X } from "lucide-react";
 
 const panels = [
@@ -15,10 +15,33 @@ const panels = [
 
 function Caption({ children }: { children: React.ReactNode }) { return <div className="comic-caption">{children}</div>; }
 function Speech({ children }: { children: React.ReactNode }) { return <div className="speech-bubble">{children}<i /></div>; }
+function SignalSVG() { return <svg className="signal-svg" viewBox="0 0 420 160" aria-hidden="true"><path d="M0 120 C80 22 130 140 205 70 S320 30 420 105" /><path d="M0 145 C85 82 115 125 190 104 S300 60 420 30" /><circle cx="205" cy="70" r="6" /><circle cx="320" cy="47" r="4" /></svg>; }
+
+function WebGLField() {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const gl = canvas.getContext("webgl", { alpha: true, antialias: true });
+    if (!gl) return;
+    const vertex = `attribute vec2 a_position; attribute float a_size; uniform float u_time; uniform float u_scroll; varying float v_alpha; void main(){ float drift = sin(u_time*.0005 + a_position.x*9.0)*.025; gl_Position=vec4(a_position.x + drift, a_position.y + u_scroll*.06, 0.0, 1.0); gl_PointSize=a_size; v_alpha=.25 + .22*sin(u_time*.001 + a_position.y*7.0); }`;
+    const fragment = `precision mediump float; varying float v_alpha; void main(){ vec2 p=gl_PointCoord-.5; float d=length(p); if(d>.5) discard; gl_FragColor=vec4(.78,.14,.10,(1.0-d*2.0)*v_alpha); }`;
+    const compile = (type: number, source: string) => { const shader = gl.createShader(type)!; gl.shaderSource(shader, source); gl.compileShader(shader); return shader; };
+    const program = gl.createProgram()!; gl.attachShader(program, compile(gl.VERTEX_SHADER, vertex)); gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragment)); gl.linkProgram(program); gl.useProgram(program);
+    const points = new Float32Array(Array.from({ length: 190 }, (_, i) => i % 2 === 0 ? Math.random() * 2 - 1 : Math.random() * 2 - 1).flatMap((value) => value));
+    const sizes = new Float32Array(95).map(() => 1.5 + Math.random() * 3.4);
+    const pos = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, pos); gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW); const loc = gl.getAttribLocation(program, "a_position"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const size = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, size); gl.bufferData(gl.ARRAY_BUFFER, sizes, gl.STATIC_DRAW); const sizeLoc = gl.getAttribLocation(program, "a_size"); gl.enableVertexAttribArray(sizeLoc); gl.vertexAttribPointer(sizeLoc, 1, gl.FLOAT, false, 0, 0);
+    const timeLoc = gl.getUniformLocation(program, "u_time"); const scrollLoc = gl.getUniformLocation(program, "u_scroll"); let raf = 0; const started = performance.now();
+    const render = (time: number) => { const ratio = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight); gl.viewport(0, 0, canvas.width, canvas.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT); gl.uniform1f(timeLoc, time - started); gl.uniform1f(scrollLoc, ratio); gl.drawArrays(gl.POINTS, 0, 95); raf = requestAnimationFrame(render); }; const resize = () => { const dpr = Math.min(2, window.devicePixelRatio || 1); canvas.width = innerWidth*dpr; canvas.height = innerHeight*dpr; canvas.style.width = `${innerWidth}px`; canvas.style.height = `${innerHeight}px`; }; resize(); window.addEventListener("resize", resize); raf = requestAnimationFrame(render); return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+  return <canvas className="webgl-field" ref={ref} aria-hidden="true" />;
+}
 
 export default function Home() {
   const [active, setActive] = useState(0);
   const [menu, setMenu] = useState(false);
+  const [expandedBox, setExpandedBox] = useState<number | null>(null);
   useEffect(() => {
     let frame = 0;
     const updateTimeline = () => {
@@ -49,11 +72,11 @@ export default function Home() {
     <header className="comic-nav"><button className="comic-logo" onClick={() => jump("panel-intro")}><span className="comic-logo__mark">E</span><span>ESCOM<small>/ STUDIO</small></span></button><div className="comic-nav__status"><b /> ISSUE 01 / GROWTH ENGINE</div><button className="comic-menu" onClick={() => setMenu(true)}><Menu size={19} /> INDEX</button></header>
     <div className="issue-progress"><span>{String(active + 1).padStart(2, "0")}</span><i><b style={{ height: `${((active + 1) / panels.length) * 100}%` }} /></i><span>04</span></div>
 
-    <section className="comic-hero" id="panel-intro"><div className="hero-ink" /><div className="hero-copy"><div className="panel-tag">ESCOM / GROWTH ENGINE</div><h1>Marketing,<br /><em>sem ruído.</em></h1><p>Construímos o sistema por trás do crescimento: dados, tráfego, automação, branding e vendas.</p><button className="comic-cta" onClick={() => jump("panel-data")}>VIRAR A PÁGINA <ArrowDown size={16} /></button></div><div className="hero-frame"><img src="/manus-storage/escom-comic-character_71abfa06.png" alt="Operador da Escom caminhando pelo sistema de crescimento" /><Caption>EM UM TERRITÓRIO CHEIO DE RUÍDO,<br />UMA FIGURA PROCURA O SINAL.</Caption></div></section>
+    <section className="comic-hero" id="panel-intro"><WebGLField /><div className="hero-ink" /><div className="hero-copy"><div className="panel-tag">ESCOM / GROWTH ENGINE</div><h1>Marketing,<br /><em>sem ruído.</em></h1><p>Construímos o sistema por trás do crescimento: dados, tráfego, automação, branding e vendas.</p><button className="comic-cta" onClick={() => jump("panel-data")}>VIRAR A PÁGINA <ArrowDown size={16} /></button></div><div className="hero-frame"><img src="/manus-storage/escom-comic-character_71abfa06.png" alt="Operador da Escom caminhando pelo sistema de crescimento" /><Caption>EM UM TERRITÓRIO CHEIO DE RUÍDO,<br />UMA FIGURA PROCURA O SINAL.</Caption></div></section>
 
-    <div className="panel-story">{panels.slice(1).map((panel, index) => <section className={`comic-panel panel-${panel.id} ${active === index + 1 ? "is-active" : ""}`} id={`panel-${panel.id}`} key={panel.id}><div className="panel-art" style={{ backgroundImage: `url(${panel.image})` }} /><div className="panel-border panel-border--one" /><div className="panel-border panel-border--two" /><div className="panel-copy"><div className="panel-tag"><span>{panel.no}</span> // {panel.kicker}</div><h2>{panel.title.split("\n").map((line) => <span key={line}>{line}</span>)}</h2><p>{panel.caption}</p></div><Speech>{panel.bubble}</Speech><Caption>{panel.no === "02" ? "DADOS QUE DECIDEM." : panel.no === "03" ? "AUTOMAÇÃO INTELIGENTE." : "DO PRIMEIRO CLIQUE À VENDA."}</Caption><div className="ink-streak" /></section>)}</div>
+    <div className="panel-story">{panels.slice(1).map((panel, index) => <section className={`comic-panel panel-${panel.id} ${active === index + 1 ? "is-active" : ""}`} id={`panel-${panel.id}`} key={panel.id}><div className="panel-art" style={{ backgroundImage: `url(${panel.image})` }} /><SignalSVG /><div className="panel-frames" aria-hidden="true"><span /><span /><span /></div><div className="panel-border panel-border--one" /><div className="panel-border panel-border--two" /><div className="panel-copy"><div className="panel-tag"><span>{panel.no}</span> // {panel.kicker}</div><h2>{panel.title.split("\n").map((line) => <span key={line}>{line}</span>)}</h2><p>{panel.caption}</p></div><Speech>{panel.bubble}</Speech><Caption>{panel.no === "02" ? "DADOS QUE DECIDEM." : panel.no === "03" ? "AUTOMAÇÃO INTELIGENTE." : "DO PRIMEIRO CLIQUE À VENDA."}</Caption><div className="ink-streak" /></section>)}</div>
 
-    <section className="results-page" id="results"><div className="page-topline"><span>// ISSUE 02 / PROOF</span><span>REAL SYSTEMS / REAL SIGNALS</span></div><div className="results-layout"><div><p className="panel-tag">O QUE ENCONTRAMOS NO CAMINHO</p><h2>Não vendemos<br /><em>presença.</em><br />Operamos resultado.</h2><p className="results-lead">Do primeiro clique ao fechamento da venda no CRM, cada etapa é supervisionada, integrada e mensurada.</p></div><div className="result-panels">{[["40h/sem", "recuperadas em automação"], ["+240%", "aumento de conversão"], ["0", "leads perdidos"]].map(([value, label], i) => <div className="result-box" key={label}><span>CASE / 0{i + 1}</span><strong>{value}</strong><p>{label}</p></div>)}</div></div></section>
+    <section className="results-page" id="results"><div className="page-topline"><span>// ISSUE 02 / PROOF</span><span>REAL SYSTEMS / REAL SIGNALS</span></div><div className="results-layout"><div><p className="panel-tag">O QUE ENCONTRAMOS NO CAMINHO</p><h2>Não vendemos<br /><em>presença.</em><br />Operamos resultado.</h2><p className="results-lead">Do primeiro clique ao fechamento da venda no CRM, cada etapa é supervisionada, integrada e mensurada.</p></div><div className="result-panels">{[["40h/sem", "recuperadas em automação", "Tempo devolvido para a operação comercial."], ["+240%", "aumento de conversão", "Um funil que aprende com cada interação."], ["0", "leads perdidos", "Rotas conectadas do primeiro contato ao CRM."]].map(([value, label, detail], i) => <button className={`result-box ${expandedBox === i ? "is-expanded" : ""}`} onClick={() => setExpandedBox(expandedBox === i ? null : i)} key={label}><span>CASE / 0{i + 1}</span><strong>{value}</strong><p>{label}</p><small>{detail}</small></button>)}</div></div></section>
 
     <section className="system-page" id="services"><div className="page-topline"><span>// THE SYSTEM</span><span>SEVEN DISCIPLINES / ONE ENGINE</span></div><div className="system-layout"><div><p className="panel-tag">O MAPA DA OPERAÇÃO</p><h2>Uma ideia<br /><em>em movimento.</em></h2></div><div className="service-stack">{["Dados & BI", "Branding & identidade", "Mídia paga & tráfego", "Sites & landing pages", "Automação & CRM", "Sistemas web & e-commerce"].map((service, i) => <button key={service} onClick={() => jump("contact")}><span>0{i + 1}</span><b>{service}</b><ArrowUpRight size={17} /></button>)}</div></div></section>
 
