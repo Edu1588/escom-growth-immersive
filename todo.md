@@ -99,3 +99,13 @@
 - [ ] Criar cena clean antes do CTA final com robô e convite ao diagnóstico.
 - [ ] Reduzir elementos decorativos nas cenas clean e manter foco/escala cinematográfica.
 - [ ] Alternar cenas clean com capítulos densos sem perder a copy completa.
+
+## Poses, transições e digitação
+
+- [ ] Pose 01: robô procurando o sinal, mão próxima ao balão inicial.
+- [ ] Pose 02: robô analisando dados, gesto direcionado ao balão de decisão.
+- [ ] Pose 03: robô ativando o Growth Core, mão e núcleo apontados para o diálogo final.
+- [ ] Sincronizar pose e balão em cada interlúdio.
+- [ ] Adicionar digitação progressiva com cursor nos diálogos clean.
+- [ ] Criar transições longas de câmera e máscaras entre interlúdios e capítulos.
+- [ ] Respeitar reduced motion e fallback mobile.
