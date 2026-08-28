@@ -83,3 +83,19 @@
 - [ ] Implementar máscaras clip-path para entrada e saída de cenas.
 - [ ] Melhorar boxes expansíveis com borda desenhada e conteúdo completo.
 - [ ] Validar acessibilidade, reduced motion, mobile, build e runtime.
+
+## Diagnóstico de fidelidade estrutural
+
+- [ ] Contar e localizar caixas de diálogo atuais versus necessidade narrativa por capítulo.
+- [ ] Verificar se as bordas usam apenas transform/transition ou se têm uma timeline de desenho perceptível.
+- [ ] Comparar O que bem fazemos, O sistema e Métricas com a composição de painéis e cenas da referência.
+- [ ] Registrar quais seções precisam virar cenas pinadas ou caixas expansíveis.
+- [ ] Definir uma correção que preserve a copy completa sem voltar ao layout de dashboard.
+
+## Ritmo visual clean + denso
+
+- [ ] Criar cena clean de entrada com robô centralizado e balão de contexto.
+- [ ] Criar cena clean de pausa após os pilares com apenas robô, luz e uma frase.
+- [ ] Criar cena clean antes do CTA final com robô e convite ao diagnóstico.
+- [ ] Reduzir elementos decorativos nas cenas clean e manter foco/escala cinematográfica.
+- [ ] Alternar cenas clean com capítulos densos sem perder a copy completa.
