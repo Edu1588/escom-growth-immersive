@@ -63,3 +63,23 @@
 - [ ] Gerar/ajustar assets do robô e cenários para as poses e cenas necessárias.
 - [ ] Implementar o comportamento observado com timeline contínua e câmera.
 - [ ] Validar desktop, mobile, fallback de WebGL e reduced motion.
+
+## Comparativo de cobertura e interação
+
+- [ ] Reabrir o site atual da Escom e listar todas as seções e CTAs.
+- [ ] Mapear cada seção equivalente na versão construída.
+- [ ] Verificar quais textos foram completos, adaptados ou omitidos.
+- [ ] Verificar se as bordas dos boxes têm animação real ou apenas hover/transição.
+- [ ] Verificar quais elementos respondem ao mouse e quais respondem apenas ao scroll.
+- [ ] Entregar matriz de cobertura com lacunas técnicas e de conteúdo.
+
+## Conteúdo completo + animações faltantes
+
+- [ ] Integrar a copy completa auditada: boot, hero, pilares, faixa de processo, O que bem fazemos, sistema, custo invisível, planos, processo, métricas, cases, parceiros, inteligência, FAQ, contato e rodapé.
+- [ ] Preservar preços, benefícios, métricas, cases, perguntas e respostas conforme conteúdo auditado.
+- [ ] Adicionar eventos pointermove/mousemove para câmera, quadros, robô, SVG e elementos WebGL.
+- [ ] Implementar tilt 3D e parallax de mouse nos painéis.
+- [ ] Implementar bordas SVG com stroke-dashoffset e brilho/ruído por progresso.
+- [ ] Implementar máscaras clip-path para entrada e saída de cenas.
+- [ ] Melhorar boxes expansíveis com borda desenhada e conteúdo completo.
+- [ ] Validar acessibilidade, reduced motion, mobile, build e runtime.
